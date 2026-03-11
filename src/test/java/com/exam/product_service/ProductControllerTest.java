@@ -25,7 +25,7 @@ public class ProductControllerTest {
 
     @Test
     public void testCreateProductEnglish() throws Exception {
-        String productJson = "{\"name\": \"Laptop\", \"price\": 1200.0, \"stock\": 50}";
+        String productJson = "{\"name\": \"Laptop\", \"price\": 1200.0, \"stock\": 50, \"description\": \"High-end laptop\"}";
 
         mockMvc.perform(post("/productos")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -33,12 +33,13 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Laptop"))
                 .andExpect(jsonPath("$.precio").value(1200.0))
-                .andExpect(jsonPath("$.stock").value(50));
+                .andExpect(jsonPath("$.stock").value(50))
+                .andExpect(jsonPath("$.descripcion").value("High-end laptop"));
     }
 
     @Test
     public void testCreateProductSpanish() throws Exception {
-        String productJson = "{\"nombre\": \"Laptop\", \"precio\": 1200.0, \"stock\": 50}";
+        String productJson = "{\"nombre\": \"Laptop\", \"precio\": 1200.0, \"stock\": 50, \"descripcion\": \"Laptop de alta gama\"}";
 
         mockMvc.perform(post("/productos")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -46,6 +47,7 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Laptop"))
                 .andExpect(jsonPath("$.precio").value(1200.0))
-                .andExpect(jsonPath("$.stock").value(50));
+                .andExpect(jsonPath("$.stock").value(50))
+                .andExpect(jsonPath("$.descripcion").value("Laptop de alta gama"));
     }
 }

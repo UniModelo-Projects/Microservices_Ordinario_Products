@@ -15,21 +15,27 @@ public class Product {
     @JsonAlias({"name", "nombre"})
     @Field("nombre")
     private String nombre;
-    
+
+    @JsonProperty("descripcion")
+    @JsonAlias({"description", "descripcion"})
+    @Field("descripcion")
+    private String descripcion;
+
     @JsonProperty("precio")
     @JsonAlias({"price", "precio"})
     @Field("precio")
     private Double precio;
-    
+
     @JsonProperty("stock")
     @Field("stock")
     private Integer stock;
 
     public Product() {}
 
-    public Product(String id, String nombre, Double precio, Integer stock) {
+    public Product(String id, String nombre, String descripcion, Double precio, Integer stock) {
         this.id = id;
         this.nombre = nombre;
+        this.descripcion = descripcion;
         this.precio = precio;
         this.stock = stock;
     }
@@ -64,5 +70,13 @@ public class Product {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }
