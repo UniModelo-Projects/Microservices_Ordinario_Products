@@ -15,3 +15,6 @@ Manages product information and stock.
 - `GET /productos`: List all products
 - `POST /productos`: Create a new product
 - `POST /productos/retry`: Endpoint for Broker Service to retry product creation.
+
+## Infrastructure Repo
+- [Main Infrastructure & Orchestration](https://github.com/UniModelo-Projects/Vacaciones_Microservices_Infrastructure)
