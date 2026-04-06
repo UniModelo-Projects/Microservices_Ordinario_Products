@@ -14,9 +14,11 @@ public class ProductController {
 
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
     private final ProductRepository productRepository;
+    private final org.springframework.kafka.core.KafkaTemplate<String, Object> kafkaTemplate;
 
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, org.springframework.kafka.core.KafkaTemplate<String, Object> kafkaTemplate) {
         this.productRepository = productRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @GetMapping
@@ -33,7 +35,29 @@ public class ProductController {
 
     @PostMapping
     public Product save(@RequestBody Product product) {
-        log.info("Saving product: {}", product.getNombre());
+        try {
+            log.info("Saving product: {}", product.getNombre());
+            // Simulate random failure for testing retries
+            if (Math.random() < 0.3) {
+                throw new RuntimeException("Simulated failure during product creation");
+            }
+            return productRepository.save(product);
+        } catch (Exception e) {
+            log.error("Error saving product, sending to retry topic: {}", e.getMessage());
+            
+            java.util.Map<String, Object> wrappedPayload = new java.util.HashMap<>();
+            wrappedPayload.put("data", product);
+            wrappedPayload.put("sendEmail", java.util.Map.of("status", "PENDING", "message", ""));
+            wrappedPayload.put("updateRetryJobs", java.util.Map.of("status", "PENDING", "message", ""));
+            
+            kafkaTemplate.send("product_retry_jobs", wrappedPayload);
+            throw e;
+        }
+    }
+
+    @PostMapping("/retry")
+    public Product retry(@RequestBody Product product) {
+        log.info("Retrying save for product: {}", product.getNombre());
         return productRepository.save(product);
     }
 

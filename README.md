@@ -1,17 +1,17 @@
-# Product Microservice
+# Product Service
 
-Servicio encargado de la gestión del catálogo de productos.
+## Description
+Manages product information and stock.
 
-## Detalles Técnicos
-- **Puerto:** 8081
-- **Base de Datos:** MongoDB (colección `productos`).
-- **Logs:** Envía logs al log group `producto-log-group` en CloudWatch (LocalStack).
+## Features
+- CRUD for Products
+- Stores data in MongoDB
+- Sends retry jobs to Kafka in case of failure.
 
-## Endpoints (vía Gateway)
-| Método | Endpoint | Descripción |
-| :--- | :--- | :--- |
-| `GET` | `/productos` | Listar todos los productos. |
-| `GET` | `/productos/{id}` | Obtener un producto por su ID. |
-| `POST` | `/productos` | Crear un nuevo producto. |
-| `PUT` | `/productos/{id}` | Actualizar un producto existente. |
-| `DELETE` | `/productos/{id}` | Eliminar un producto. |
+## Port
+- Default: `8081`
+
+## Endpoints
+- `GET /productos`: List all products
+- `POST /productos`: Create a new product
+- `POST /productos/retry`: Endpoint for Broker Service to retry product creation.
