@@ -4,6 +4,7 @@ import com.exam.product_service.model.Product;
 import com.exam.product_service.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,9 +57,13 @@ public class ProductController {
     }
 
     @PostMapping("/retry")
-    public Product retry(@RequestBody Product product) {
+    public ResponseEntity<?> retry(@RequestBody Product product) {
+        if (product == null || product.getNombre() == null) {
+            log.error("Received invalid product data during retry: {}", product);
+            return ResponseEntity.badRequest().body("Invalid product data: nombre is required");
+        }
         log.info("Retrying save for product: {}", product.getNombre());
-        return productRepository.save(product);
+        return ResponseEntity.ok(productRepository.save(product));
     }
 
     @PutMapping("/{id}")
