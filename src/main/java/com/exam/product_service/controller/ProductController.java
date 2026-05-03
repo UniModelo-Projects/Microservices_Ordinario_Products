@@ -73,9 +73,19 @@ public class ProductController {
         return productRepository.save(product);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable String id) {
-        log.info("Deleting product with id: {}", id);
-        productRepository.deleteById(id);
+    @PutMapping("/{id}/stock/reduce")
+    public ResponseEntity<?> reduceStock(@PathVariable String id, @RequestParam int quantity) {
+        log.info("Reducing stock for product {} by {}", id, quantity);
+        Product product = productRepository.findById(id).orElse(null);
+        if (product != null) {
+            if (product.getStock() >= quantity) {
+                product.setStock(product.getStock() - quantity);
+                productRepository.save(product);
+                return ResponseEntity.ok(product);
+            } else {
+                return ResponseEntity.badRequest().body("Insufficient stock for product " + id);
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 }
