@@ -30,14 +30,19 @@ public class Product {
     @Field("stock")
     private Integer stock;
 
+    @JsonProperty("imagenUrl")
+    @Field("imagenUrl")
+    private String imagenUrl;
+
     public Product() {}
 
-    public Product(String id, String nombre, String descripcion, Double precio, Integer stock) {
+    public Product(String id, String nombre, String descripcion, Double precio, Integer stock, String imagenUrl) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.stock = stock;
+        this.imagenUrl = imagenUrl;
     }
 
     public String getId() {
@@ -78,5 +83,13 @@ public class Product {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 }

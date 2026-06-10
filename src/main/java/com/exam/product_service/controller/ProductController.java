@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/productos")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class ProductController {
 
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
@@ -38,10 +39,6 @@ public class ProductController {
     public Product save(@RequestBody Product product) {
         try {
             log.info("Saving product: {}", product.getNombre());
-            // Simulate random failure for testing retries
-            if (Math.random() < 0.3) {
-                throw new RuntimeException("Simulated failure during product creation");
-            }
             return productRepository.save(product);
         } catch (Exception e) {
             log.error("Error saving product, sending to retry topic: {}", e.getMessage());
